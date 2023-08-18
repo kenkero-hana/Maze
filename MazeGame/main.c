@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
+//#include <stdlib.h>
 
 //マップ幅
 #define MapX (5)
@@ -83,6 +83,7 @@ void MazePlayerMove(int *playerX, int *playerY, MazeBlok maze[MapX][MapY]){
     printf("%d:下", DOWN);
     printf("%d:右", LEFT);
     printf("%d:左", RIGHT);
+    printf("\n");
     printf("数字を入力してください：");
 
     fgets(buf, sizeof(buf), stdin); //1:文字列のポインタ、2:最大文字数、3:値を読みこみ
@@ -101,7 +102,7 @@ void MazePlayerMove(int *playerX, int *playerY, MazeBlok maze[MapX][MapY]){
             maze[*playerX-1][*playerY].flag = TRUE; //ブロックの種類を判別
             if(maze[*playerX -1][*playerY].kind != WALL){
                 *playerX -= 1; //移動
-                printf("\nに移動しました\n");
+                printf("\n上に移動しました\n");
             }
             else{
                 printf("\n壁です\n");
@@ -153,7 +154,7 @@ void MazePlayerMove(int *playerX, int *playerY, MazeBlok maze[MapX][MapY]){
     {
         if(*playerY + 1 >= MapY){
             maze[*playerX][*playerY + 1].flag = TRUE;
-            if(maze[*playerX][*playerY +1].kind != WALL){
+            if(maze[*playerX][*playerY + 1].kind != WALL){
                 *playerY += 1;
                 printf("\n左に移動しました\n");
             }
@@ -173,7 +174,7 @@ void MazePlayerMove(int *playerX, int *playerY, MazeBlok maze[MapX][MapY]){
 
 //ゴール判定
 int MazeGoalCheak(int *playerX, int *playerY, MazeBlok maze[MapX][MapY]){
-    if(maze[playerX][playerY].kind == GOAL){
+    if(maze[*playerX][*playerY].kind == GOAL){
         printf("ゴール！\n");
         return 1;
     }
@@ -186,18 +187,18 @@ int main(void){
     MazePlayer player;
 
     MazeBlok maze[MapX][MapY] = {
-        { {START,TRUE},{ROAD,TRUE} ,{WALL,TRUE},{WALL,TRUE},{WALL,TRUE}},
-        { {WALL,TRUE},{ROAD,TRUE} ,{ROAD,TRUE} ,{WALL,TRUE} ,{WALL,TRUE}},
-        { {WALL,TRUE},{WALL,TRUE},{ROAD,TRUE} ,{ROAD,TRUE} ,{WALL,TRUE}},
-        { {WALL,TRUE},{WALL,TRUE},{WALL,TRUE},{ROAD,TRUE} ,{WALL,TRUE}},
-        { {WALL,TRUE},{WALL,TRUE},{WALL,TRUE},{ROAD,TRUE} ,{GOAL,TRUE}}
+        { {START,TRUE},{ROAD,FALSE} ,{WALL,FALSE},{WALL,FALSE},{WALL,FALSE}},
+        { {ROAD,FALSE},{ROAD,FALSE} ,{ROAD,FALSE} ,{WALL,FALSE} ,{WALL,FALSE}},
+        { {WALL,FALSE},{WALL,FALSE},{ROAD,FALSE} ,{ROAD,FALSE} ,{WALL,FALSE}},
+        { {WALL,FALSE},{WALL,FALSE},{WALL,FALSE},{ROAD,FALSE} ,{WALL,FALSE}},
+        { {WALL,FALSE},{WALL,FALSE},{WALL,FALSE},{ROAD,FALSE} ,{GOAL,TRUE}}
     };
 
     if(MazePlayerInit(&player.playX, &player.playY, maze) == -1){
         return 0;
     }
 
-    while(MazeGoalcheck(player.playX, player.playY, maze) != 1){
+    while(MazeGoalCheak(&player.playX, &player.playY, maze) != 1){
         //迷路表示
         MazeDrop(player.playX, player.playY, maze);
         //プレイヤー移動
