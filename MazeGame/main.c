@@ -48,7 +48,7 @@ void MazeDrop(int *playerX, int *playerY, MazeBlok maze[MapX][MapY]){
 
     for(i = 0; i < MapX; i++){
         for(j = 0; j < MapY; j++){
-            if(i == playerX && j == playerY){
+            if(i == *playerX && j == *playerY){
                 printf("P");
             }
             else if(maze[i][j].flag == FALSE){
@@ -81,8 +81,8 @@ void MazePlayerMove(int *playerX, int *playerY, MazeBlok maze[MapX][MapY]){
 
     printf("%d:上", UP);
     printf("%d:下", DOWN);
-    printf("%d:右", LEFT);
-    printf("%d:左", RIGHT);
+    printf("%d:左", LEFT);
+    printf("%d:右", RIGHT);
     printf("\n");
     printf("数字を入力してください：");
 
@@ -152,11 +152,11 @@ void MazePlayerMove(int *playerX, int *playerY, MazeBlok maze[MapX][MapY]){
 
     case RIGHT:
     {
-        if(*playerY + 1 >= MapY){
+        if(*playerY + 1 < MapY){
             maze[*playerX][*playerY + 1].flag = TRUE;
             if(maze[*playerX][*playerY + 1].kind != WALL){
                 *playerY += 1;
-                printf("\n左に移動しました\n");
+                printf("\n右に移動しました\n");
             }
             else{
                 printf("\n壁です\n");
@@ -166,8 +166,6 @@ void MazePlayerMove(int *playerX, int *playerY, MazeBlok maze[MapX][MapY]){
             printf("\n範囲外です\n");
         }
     }
-        break;
-    default:
         break;
     }
 }
@@ -200,12 +198,12 @@ int main(void){
 
     while(MazeGoalCheak(&player.playX, &player.playY, maze) != 1){
         //迷路表示
-        MazeDrop(player.playX, player.playY, maze);
+        MazeDrop(&player.playX, &player.playY, maze);
         //プレイヤー移動
         MazePlayerMove(&player.playX, &player.playY, maze);
     }
 
-    MazeDrop(player.playX, player.playY, maze);
+    MazeDrop(&player.playX, &player.playY, maze);
 
     return 0;
 }
